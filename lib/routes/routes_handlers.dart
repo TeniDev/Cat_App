@@ -16,7 +16,3 @@ Widget detailPageBuilder(BuildContext context, GoRouterState state) {
     catInfo: state.extra! as Cat,
   );
 }
-
-Widget notFoundPage(BuildContext context, GoRouterState state) {
-  return Container();
-}

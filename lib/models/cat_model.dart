@@ -39,7 +39,7 @@ class Cat {
     healthIssues = json['health_issues'] ?? 0;
     intelligence = json['intelligence'] ?? 0;
     wikipediaUrl = json['wikipedia_url'] ?? '';
-    imageCat = json['image'] != null ? ImageCat.fromJson(json['image']) : null;
+    imageCat = ImageCat.fromJson(json['image'] ?? {});
   }
 
   Map<String, dynamic> toJson() {
@@ -58,7 +58,7 @@ class Cat {
     data['wikipedia_url'] = wikipediaUrl;
     if (imageCat != null) {
       data['image'] = imageCat!.toJson();
-    }
+    } else {}
 
     return data;
   }
@@ -75,7 +75,7 @@ class ImageCat {
 
   ImageCat.fromJson(Map<String, dynamic> json) {
     id = json['id'] ?? '';
-    url = json['url'] ?? '';
+    url = json['url'] ?? 'https://maxler.com/local/templates/maxler/assets/img/not-found.png';
   }
 
   Map<String, dynamic> toJson() {

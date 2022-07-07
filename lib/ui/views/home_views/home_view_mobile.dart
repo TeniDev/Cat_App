@@ -5,10 +5,18 @@ class HomeViewMobile extends StatelessWidget {
     Key? key,
     required this.catList,
     required this.goToDetail,
+    required this.controller,
+    required this.onChanged,
+    required this.isSearching,
+    required this.matchSearch,
   }) : super(key: key);
 
   final List<Cat> catList;
   final Function goToDetail;
+  final TextEditingController controller;
+  final Function onChanged;
+  final bool isSearching;
+  final Function matchSearch;
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +56,22 @@ class HomeViewMobile extends StatelessWidget {
                       padding: size.symmetric(context, .05, .05),
                       shrinkWrap: true,
                       physics: const BouncingScrollPhysics(),
-                      itemBuilder: (context, index) => CatCard(
-                        catInfo: catList[index],
-                        goToDetail: goToDetail,
-                      ),
+                      itemCount: catList.length,
+                      itemBuilder: (context, index) {
+                        if (isSearching) {
+                          return matchSearch(catList[index].name)
+                              ? CatCard(
+                                  catInfo: catList[index],
+                                  goToDetail: goToDetail,
+                                )
+                              : Container();
+                        }
+
+                        return CatCard(
+                          catInfo: catList[index],
+                          goToDetail: goToDetail,
+                        );
+                      },
                     ),
                   ),
           ],
@@ -100,10 +120,16 @@ class HomeViewMobile extends StatelessWidget {
 
                 // SEARCH BAR
                 Container(
-                  constraints: const BoxConstraints(
-                    maxWidth: 350,
+                  constraints: BoxConstraints(
+                    maxWidth: size.width(context, .8),
                   ),
                   child: TextField(
+                    controller: controller,
+                    onChanged: (value) {
+                      debouncer.run(() {
+                        onChanged(value);
+                      });
+                    },
                     cursorColor: colors.accent,
                     style: styles.regularLarge(color: colors.accent),
                     decoration: InputDecoration(

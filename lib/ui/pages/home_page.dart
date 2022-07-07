@@ -1,3 +1,4 @@
+import 'package:cat_app/utils/debouncer.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
@@ -39,6 +40,10 @@ class HomePage extends ConsumerWidget {
                 return HomeViewMobile(
                   catList: state.catList!,
                   goToDetail: notifier.goToCatDetail,
+                  controller: notifier.searchController,
+                  onChanged: notifier.isSearching,
+                  isSearching: state.isSearching!,
+                  matchSearch: notifier.matchSearch,
                 );
               }
             },
