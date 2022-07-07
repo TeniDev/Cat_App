@@ -14,4 +14,8 @@ class _HomeState extends StateNotifier<HomeModelState> {
       rethrow;
     }
   }
+
+  void goToCatDetail(BuildContext context, Cat catInfo) {
+    context.push('/detail/${catInfo.id}', extra: catInfo);
+  }
 }

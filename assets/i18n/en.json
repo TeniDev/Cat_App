@@ -1,6 +1,21 @@
 {
     "general_text" : {
         "app_text" : "Catbreeds",
-        "search_text": "Search..."
+        "search_text": "Search...",
+        "loading_text": "Loading data"
+    },
+    "cat_card_text" : {
+        "see_more_text" : "See more",
+        "intelligence_text": "Intelligence"
+    },
+    "detail_cat_text" : {
+        "origin_text": "Origin",
+        "temperament_text": "Temperament",
+        "life_span_text": "Life Span",
+        "intelligence_text": "Intelligence",
+        "adaptability_text": "Adaptability",
+        "child_friendly_text": "Child Friendly",
+        "health_issues_text": "Health Issues",
+        "more_info_text" : "More information"
     }
 }

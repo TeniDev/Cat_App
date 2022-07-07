@@ -18,6 +18,7 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(homeState);
+    final notifier = ref.watch(homeState.notifier);
 
     _homeConfig(
       context: context,
@@ -37,6 +38,7 @@ class HomePage extends ConsumerWidget {
               } else {
                 return HomeViewMobile(
                   catList: state.catList!,
+                  goToDetail: notifier.goToCatDetail,
                 );
               }
             },

@@ -4,9 +4,11 @@ class HomeViewMobile extends StatelessWidget {
   const HomeViewMobile({
     Key? key,
     required this.catList,
+    required this.goToDetail,
   }) : super(key: key);
 
   final List<Cat> catList;
+  final Function goToDetail;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,10 @@ class HomeViewMobile extends StatelessWidget {
                         ),
                         SizedBox(height: size.width(context, .05)),
                         Text(
-                          'Cargando información',
+                          AppLocalizationService.of(context).translate(
+                            'general_text',
+                            'loading_text',
+                          )!,
                           style: styles.regularMedium(color: colors.lightGrey),
                         ),
                       ],
@@ -45,45 +50,10 @@ class HomeViewMobile extends StatelessWidget {
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (context, index) => CatCard(
                         catInfo: catList[index],
+                        goToDetail: goToDetail,
                       ),
                     ),
                   ),
-
-            /* FutureBuilder(
-              future: catService.getCats(),
-              builder: (BuildContext context, AsyncSnapshot<List<Cat>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return SizedBox(
-                    height: size.height(context, .65),
-                    width: size.fullWidth(context),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(
-                          color: colors.primary,
-                        ),
-                        SizedBox(height: size.width(context, .05)),
-                        Text(
-                          'Cargando información',
-                          style: styles.regularMedium(color: colors.lightGrey),
-                        ),
-                      ],
-                    ),
-                  );
-                } else {
-                  return Expanded(
-                    child: ListView.builder(
-                      padding: size.symmetric(context, .05, .05),
-                      shrinkWrap: true,
-                      physics: const BouncingScrollPhysics(),
-                      itemBuilder: (context, index) => CatCard(
-                        catInfo: snapshot.data![index],
-                      ),
-                    ),
-                  );
-                }
-              },
-            ), */
           ],
         ),
         Positioned(

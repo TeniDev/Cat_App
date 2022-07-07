@@ -1,6 +1,21 @@
 {
     "general_text" : {
         "app_text" : "Razas de gatos",
-        "search_text": "Buscar..."
+        "search_text": "Buscar...",
+        "loading_text": "Cargando información"
+    },
+    "cat_card_text" : {
+        "see_more_text" : "Ver más",
+        "intelligence_text": "Inteligencia"
+    },
+    "detail_cat_text" : {
+        "origin_text": "Origen",
+        "temperament_text": "Temperamento",
+        "life_span_text": "Expectativa de vida",
+        "intelligence_text": "Inteligencia",
+        "adaptability_text": "Adaptabilidad",
+        "child_friendly_text": "Amigable con los niños",
+        "health_issues_text": "Problemas de salud",
+        "more_info_text" : "Más información"
     }
 }

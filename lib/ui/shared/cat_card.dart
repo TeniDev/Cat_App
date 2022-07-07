@@ -5,14 +5,17 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'package:cat_app/models/cat_model.dart';
 import 'package:cat_app/utils/utils.dart';
+import 'package:cat_app/services/services.dart';
 
 class CatCard extends StatelessWidget {
   const CatCard({
     Key? key,
     required this.catInfo,
+    required this.goToDetail,
   }) : super(key: key);
 
   final Cat catInfo;
+  final Function goToDetail;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +47,7 @@ class CatCard extends StatelessWidget {
 
               //  MORE INFO
               InkWell(
-                onTap: () {},
+                onTap: () => goToDetail(context, catInfo),
                 child: Container(
                   padding: size.symmetric(context, .02, .01),
                   decoration: BoxDecoration(
@@ -52,7 +55,10 @@ class CatCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
-                    'Ver más',
+                    AppLocalizationService.of(context).translate(
+                      'cat_card_text',
+                      'see_more_text',
+                    )!,
                     style: styles.regularMedium(color: colors.white),
                   ),
                 ),
@@ -69,20 +75,26 @@ class CatCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Image.network(
-              catInfo.imageCat!.url!,
-              fit: BoxFit.fitWidth,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return Shimmer.fromColors(
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey[100]!,
-                  child: Icon(
-                    Icons.image_rounded,
-                    size: size.width(context, .3),
-                  ),
-                );
-              },
+            child: Hero(
+              tag: '${catInfo.id}',
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.network(
+                  catInfo.imageCat!.url!,
+                  fit: BoxFit.fitWidth,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: Icon(
+                        Icons.image_rounded,
+                        size: size.width(context, .3),
+                      ),
+                    );
+                  },
+                ),
+              ),
             ),
           ),
 
@@ -99,7 +111,13 @@ class CatCard extends StatelessWidget {
               Column(
                 children: [
                   // LABEL
-                  Text('Intelligence', style: styles.regularSmall()),
+                  Text(
+                    AppLocalizationService.of(context).translate(
+                      'cat_card_text',
+                      'intelligence_text',
+                    )!,
+                    style: styles.regularSmall(),
+                  ),
                   SizedBox(height: size.width(context, .01)),
                   // RATING
                   RatingBarIndicator(

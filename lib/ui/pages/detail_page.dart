@@ -1,11 +1,15 @@
-import 'package:cat_app/models/cat_model.dart';
+import 'package:cat_app/services/services.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class ItemPage extends StatefulWidget {
-  ItemPage({
+import 'package:cat_app/models/cat_model.dart';
+import 'package:cat_app/utils/utils.dart';
+
+class DetailPage extends StatelessWidget {
+  const DetailPage({
     Key? key,
     required this.catInfo,
   }) : super(key: key);
@@ -13,225 +17,222 @@ class ItemPage extends StatefulWidget {
   final Cat catInfo;
 
   @override
-  State<ItemPage> createState() => _ItemPageState();
-}
-
-class _ItemPageState extends State<ItemPage> {
-  @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.grey,
+        backgroundColor: colors.primary,
         title: Text(
-          widget.catInfo.name!,
-          style: TextStyle(fontSize: 25),
+          catInfo.name!,
+          style: styles.boldLarge(color: colors.white),
         ),
         automaticallyImplyLeading: false,
         leading: IconButton(
-          onPressed: () {
-            GoRouter.of(context).go('/homeBuilder');
-          },
+          onPressed: () => GoRouter.of(context).pop(),
           icon: Icon(
-            Icons.arrow_back,
+            Icons.arrow_back_ios,
+            size: size.width(context, .05),
           ),
         ),
         centerTitle: true,
       ),
       body: SizedBox(
-        height: size.height,
-        width: size.width,
+        height: size.fullHeight(context),
+        width: size.fullWidth(context),
         child: Column(
           children: [
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-              // height: 350,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.network(
-                  widget.catInfo.imageCat!.url!,
-                  fit: BoxFit.contain,
+            Padding(
+              padding: size.fromLTRB(context, .05, .05, .05, 0),
+              child: Hero(
+                tag: '${catInfo.id}',
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: SizedBox(
+                    height: size.width(context, .6),
+                    width: size.fullWidth(context),
+                    child: Image.network(
+                      catInfo.imageCat!.url!,
+                      fit: BoxFit.fitWidth,
+                    ),
+                  ),
                 ),
               ),
             ),
             Expanded(
               child: ListView(
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+                padding: size.all(context, .075),
                 shrinkWrap: true,
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 children: [
                   Text(
-                    widget.catInfo.description!,
+                    catInfo.description!,
                     textAlign: TextAlign.justify,
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
+                    style: styles.lightMedium(),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: size.width(context, .05)),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Origin',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
+                        AppLocalizationService.of(context).translate(
+                          'detail_cat_text',
+                          'origin_text',
+                        )!,
+                        style: styles.boldLarge(),
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: size.width(context, .025)),
                       Text(
-                        widget.catInfo.origin!,
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
+                        catInfo.origin!,
+                        style: styles.lightSmall(),
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: size.width(context, .05)),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Temperament',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
+                        AppLocalizationService.of(context).translate(
+                          'detail_cat_text',
+                          'temperament_text',
+                        )!,
+                        style: styles.boldLarge(),
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: size.width(context, .025)),
                       Text(
-                        widget.catInfo.temperament!,
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
+                        catInfo.temperament!,
+                        style: styles.lightMedium(),
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: size.width(context, .05)),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Life Span',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
+                        AppLocalizationService.of(context).translate(
+                          'detail_cat_text',
+                          'life_span_text',
+                        )!,
+                        style: styles.boldLarge(),
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: size.width(context, .025)),
                       Text(
-                        widget.catInfo.lifeSpan! + " years",
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
+                        "${catInfo.lifeSpan!} years",
+                        style: styles.lightMedium(),
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: size.width(context, .05)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Intelligence:',
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
+                        AppLocalizationService.of(context).translate(
+                          'detail_cat_text',
+                          'intelligence_text',
+                        )!,
+                        style: styles.boldLarge(),
                       ),
                       RatingBarIndicator(
-                        rating: widget.catInfo.intelligence!.toDouble(),
-                        itemBuilder: (context, index) => Icon(
+                        rating: catInfo.intelligence!.toDouble(),
+                        itemBuilder: (context, index) => const Icon(
                           Icons.star,
                           color: Colors.amber,
                         ),
                         itemCount: 5,
-                        itemSize: 25,
+                        itemSize: size.width(context, .05),
                         direction: Axis.horizontal,
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: size.width(context, .05)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Adaptability:',
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
+                        AppLocalizationService.of(context).translate(
+                          'detail_cat_text',
+                          'adaptability_text',
+                        )!,
+                        style: styles.boldLarge(),
                       ),
                       RatingBarIndicator(
-                        rating: widget.catInfo.adaptability!.toDouble(),
-                        itemBuilder: (context, index) => Icon(
+                        rating: catInfo.adaptability!.toDouble(),
+                        itemBuilder: (context, index) => const Icon(
                           Icons.star,
                           color: Colors.amber,
                         ),
                         itemCount: 5,
-                        itemSize: 25,
+                        itemSize: size.width(context, .05),
                         direction: Axis.horizontal,
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: size.width(context, .05)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Child Friendly:',
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
+                        AppLocalizationService.of(context).translate(
+                          'detail_cat_text',
+                          'child_friendly_text',
+                        )!,
+                        style: styles.boldLarge(),
                       ),
                       RatingBarIndicator(
-                        rating: widget.catInfo.childFriendly!.toDouble(),
-                        itemBuilder: (context, index) => Icon(
+                        rating: catInfo.childFriendly!.toDouble(),
+                        itemBuilder: (context, index) => const Icon(
                           Icons.star,
                           color: Colors.amber,
                         ),
                         itemCount: 5,
-                        itemSize: 25,
+                        itemSize: size.width(context, .05),
                         direction: Axis.horizontal,
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: size.width(context, .05)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Health Issues:',
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
+                        AppLocalizationService.of(context).translate(
+                          'detail_cat_text',
+                          'health_issues_text',
+                        )!,
+                        style: styles.boldLarge(),
                       ),
                       RatingBarIndicator(
-                        rating: widget.catInfo.healthIssues!.toDouble(),
-                        itemBuilder: (context, index) => Icon(
+                        rating: catInfo.healthIssues!.toDouble(),
+                        itemBuilder: (context, index) => const Icon(
                           Icons.star,
                           color: Colors.amber,
                         ),
                         itemCount: 5,
-                        itemSize: 25,
+                        itemSize: size.width(context, .05),
                         direction: Axis.horizontal,
                       ),
                     ],
                   ),
-                  SizedBox(height: 40),
+                  SizedBox(height: size.width(context, .1)),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.grey,
-                      onPrimary: Colors.black,
+                      primary: colors.primary,
+                      onPrimary: colors.accent,
                       shape: const StadiumBorder(),
                     ),
                     onPressed: () {
-                      final Uri _url = Uri.parse(widget.catInfo.wikipediaUrl!);
-                      launchUrl(_url);
+                      final Uri url = Uri.parse(catInfo.wikipediaUrl!);
+                      launchUrl(url);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(15),
                       child: Text(
-                        'More information',
-                        style: TextStyle(fontSize: 20),
+                        AppLocalizationService.of(context).translate(
+                          'detail_cat_text',
+                          'more_info_text',
+                        )!,
+                        style: styles.boldLarge(color: colors.white),
                       ),
                     ),
                   ),

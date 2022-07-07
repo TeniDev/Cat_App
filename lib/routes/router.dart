@@ -10,6 +10,10 @@ class RouterConfig {
         path: '/home',
         builder: homePageBuilder,
       ),
+      GoRoute(
+        path: '/detail/:cat',
+        builder: detailPageBuilder,
+      ),
     ],
     urlPathStrategy: UrlPathStrategy.path,
   );
