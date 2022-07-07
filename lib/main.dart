@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'package:cat_app/routes/router.dart';
 import 'package:cat_app/services/services.dart';
@@ -16,8 +17,19 @@ Future<void> main() async {
   runApp(const ProviderScope(child: CatApp()));
 }
 
-class CatApp extends StatelessWidget {
+class CatApp extends StatefulWidget {
   const CatApp({Key? key}) : super(key: key);
+
+  @override
+  State<CatApp> createState() => _CatAppState();
+}
+
+class _CatAppState extends State<CatApp> {
+  @override
+  void initState() {
+    super.initState();
+    FlutterNativeSplash.remove();
+  }
 
   @override
   Widget build(BuildContext context) {
